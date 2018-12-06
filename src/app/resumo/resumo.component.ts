@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ResumoService } from './resumo.service';
 
 @Component({
   selector: 'app-resumo',
   templateUrl: './resumo.component.html',
   styleUrls: ['./resumo.component.css']
 })
-export class ResumoComponent implements OnInit {
+export class ResumoComponent implements OnInit,OnDestroy {
   
   /*
     resumo = {
@@ -38,16 +38,18 @@ export class ResumoComponent implements OnInit {
 
 
   resumo;
-
-  
-
-  constructor(private http: HttpClient) { 
-    this.http.get
-    ("http://www.devup.com.br/php/api-dashboard/api/resumo")
-    .subscribe( resumo => this.resumo = resumo);
+  inscricao;
+  constructor(private resumoService: ResumoService) { 
+    
   }
 
   ngOnInit() {
+   this.inscricao = this.resumoService.getResumo()
+   .subscribe(dados => this.resumo = dados);
+  }
+
+  ngOnDestroy(){
+    this.inscricao.unsubscribe();
   }
 
 }
